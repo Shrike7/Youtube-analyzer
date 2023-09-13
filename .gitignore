@@ -1,2 +1,5 @@
-#Pycharm
+# Pycharm
 .idea/
+
+# Because testing on personal data
+data/
