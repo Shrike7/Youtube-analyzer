@@ -3,3 +3,5 @@
 
 # Because testing on personal data
 data/
+
+.env
