@@ -2,6 +2,8 @@ import json
 import psycopg2
 import os
 from dotenv import load_dotenv
+from parse_to_database import proceed_record_to_db
+
 
 def main():
     load_dotenv()
@@ -31,8 +33,10 @@ def main():
                 chanel_name = watch_record["subtitles"][0]["name"]
 
                 watch_time = watch_record["time"]
+                user_id = 1  # Test user for test purposes #TODO Implement better system
 
-                print(video_id, video_name, chanel_id, chanel_name, watch_time)
+                proceed_record_to_db(cursor, video_id, video_name, chanel_id, chanel_name,
+                                     watch_time, user_id, os.environ.get("API_KEY"))
 
                 conn.commit()
 
