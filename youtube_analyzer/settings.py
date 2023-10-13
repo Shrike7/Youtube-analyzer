@@ -85,6 +85,10 @@ DATABASES = {
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': config('DB_HOST'),
         'PORT': config('DB_PORT'),
+    },
+    'mongodb': {
+        'ENGINE': 'djongo',
+        'NAME': config('MONGO_DB_NAME'),
     }
 }
 
