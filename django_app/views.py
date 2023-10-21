@@ -2,8 +2,9 @@ from django.shortcuts import render, HttpResponse
 from .forms import JSONUploadForm
 import json
 from .models import File, Video, Subtitle
+from .tasks import proceed_video
 
-# Create your views here.
+
 def home(request):
     return HttpResponse("HEllo")
 
@@ -34,6 +35,9 @@ def upload_json(request):
                     subtitle_db = Subtitle(name=subtitle['name'], url=subtitle['url'])
                     video_db.subtitles.append(subtitle_db)
                 video_db.save()
+
+            # Run celery task to proceed videos
+            proceed_video.delay(str(file_db.id))
 
             return HttpResponse("File uploaded")
     else:
