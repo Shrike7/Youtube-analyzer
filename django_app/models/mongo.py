@@ -22,3 +22,5 @@ class Video(Document):
     time = DateTimeField()
     products = ListField(StringField())
     activityControls = ListField(StringField())
+
+
