@@ -89,8 +89,17 @@ DATABASES = {
     'mongodb': {
         'ENGINE': 'djongo',
         'NAME': config('MONGO_DB_NAME'),
+        'CLIENT': {
+            'host': config('MONGO_DB_HOST'),
+            'port': config('MONGO_DB_PORT')
+        },
+
     }
 }
+
+from mongoengine import connect
+connect(config('MONGO_DB_NAME'), host=config('MONGO_DB_HOST'), port=int(config('MONGO_DB_PORT')))
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
