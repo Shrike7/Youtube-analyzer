@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse
 from .forms import JSONUploadForm
 import json
-from .models import File, Video, Subtitle
+from .models.mongo import File, Video, Subtitle
 from .tasks import proceed_video
 
 
