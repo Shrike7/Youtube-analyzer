@@ -1,7 +1,9 @@
 import requests
+from decouple import config
 
 
-def get_video_category(api_key, video_id):
+def get_video_category(video_id):
+    api_key = config("API_KEY")
     get_url = f"https://www.googleapis.com/youtube/v3/videos?key={api_key}&id={video_id}&fields=items(id,snippet(categoryId))&part=snippet"
 
     response = requests.get(get_url)
