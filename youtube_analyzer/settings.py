@@ -93,7 +93,6 @@ DATABASES = {
             'host': config('MONGO_DB_HOST'),
             'port': config('MONGO_DB_PORT')
         },
-
     }
 }
 
