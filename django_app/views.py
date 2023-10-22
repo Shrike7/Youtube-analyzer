@@ -23,6 +23,7 @@ def upload_json(request):
             for data in data_list:
                 video_db = Video(
                     host=file_db.id,
+                    user=1,  # TODO: change to actual user id
                     header=data['header'],
                     title=data['title'],
                     titleUrl=data['titleUrl'],
