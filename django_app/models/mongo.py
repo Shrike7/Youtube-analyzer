@@ -14,6 +14,7 @@ class Subtitle(EmbeddedDocument):
 
 class Video(Document):
     status = BooleanField(default=False)
+    user = IntField(required=True)
     host = ReferenceField(File)
     header = StringField()
     title = StringField()

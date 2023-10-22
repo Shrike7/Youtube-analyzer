@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Category(models.Model):
+    custom_id = models.IntegerField(primary_key=True, unique=True)
     name = models.CharField(max_length=256)
 
 
@@ -25,3 +26,6 @@ class WatchRecord(models.Model):
     time = models.DateTimeField()
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user_profile', 'video', 'time')
