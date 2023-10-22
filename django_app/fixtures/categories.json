@@ -1,0 +1,226 @@
+[
+  {
+    "model": "django_app.Category",
+    "pk": 1,
+    "fields": {
+      "name": "Film & Animation"
+    }
+  },
+  {
+    "model": "django_app.Category",
+    "pk": 2,
+    "fields": {
+      "name": "Autos & Vehicles"
+    }
+  },
+  {
+    "model": "django_app.Category",
+    "pk": 10,
+    "fields": {
+      "name": "Music"
+    }
+  },
+  {
+    "model": "django_app.Category",
+    "pk": 15,
+    "fields": {
+      "name": "Pets & Animals"
+    }
+  },
+  {
+    "model": "django_app.Category",
+    "pk": 17,
+    "fields": {
+      "name": "Sports"
+    }
+  },
+  {
+    "model": "django_app.Category",
+    "pk": 18,
+    "fields": {
+      "name": "Short Movies"
+    }
+  },
+  {
+    "model": "django_app.Category",
+    "pk": 19,
+    "fields": {
+      "name": "Travel & Events"
+    }
+  },
+  {
+    "model": "django_app.Category",
+    "pk": 20,
+    "fields": {
+      "name": "Gaming"
+    }
+  },
+  {
+    "model": "django_app.Category",
+    "pk": 21,
+    "fields": {
+      "name": "Videoblogging"
+    }
+  },
+  {
+    "model": "django_app.Category",
+    "pk": 22,
+    "fields": {
+      "name": "People & Blogs"
+    }
+  },
+  {
+    "model": "django_app.Category",
+    "pk": 23,
+    "fields": {
+      "name": "Comedy"
+    }
+  },
+  {
+    "model": "django_app.Category",
+    "pk": 24,
+    "fields": {
+      "name": "Entertainment"
+    }
+  },
+  {
+    "model": "django_app.Category",
+    "pk": 25,
+    "fields": {
+      "name": "News & Politics"
+    }
+  },
+  {
+    "model": "django_app.Category",
+    "pk": 26,
+    "fields": {
+      "name": "Howto & Style"
+    }
+  },
+  {
+    "model": "django_app.Category",
+    "pk": 27,
+    "fields": {
+      "name": "Education"
+    }
+  },
+  {
+      "model": "django_app.Category",
+      "pk": 28,
+      "fields": {
+      "name": "Science & Technology"
+      }
+  },
+  {
+      "model": "django_app.Category",
+      "pk": 29,
+      "fields": {
+      "name": "Nonprofits & Activism"
+      }
+  },
+  {
+      "model": "django_app.Category",
+      "pk": 30,
+      "fields": {
+      "name": "Movies"
+      }
+  },
+  {
+      "model": "django_app.Category",
+      "pk": 31,
+      "fields": {
+      "name": "Anime/Animation"
+      }
+  },
+  {
+      "model": "django_app.Category",
+      "pk": 32,
+      "fields": {
+      "name": "Action/Adventure"
+      }
+  },
+  {
+      "model": "django_app.Category",
+      "pk": 33,
+      "fields": {
+      "name": "Classics"
+      }
+  },
+  {
+      "model": "django_app.Category",
+      "pk": 34,
+      "fields": {
+      "name": "Comedy"
+      }
+  },
+  {
+      "model": "django_app.Category",
+      "pk": 35,
+      "fields": {
+      "name": "Documentary"
+      }
+  },
+  {
+      "model": "django_app.Category",
+      "pk": 36,
+      "fields": {
+      "name": "Drama"
+      }
+  },
+  {
+      "model": "django_app.Category",
+      "pk": 37,
+      "fields": {
+      "name": "Family"
+      }
+  },
+  {
+      "model": "django_app.Category",
+      "pk": 38,
+      "fields": {
+      "name": "Foreign"
+      }
+  },
+  {
+      "model": "django_app.Category",
+      "pk": 39,
+      "fields": {
+      "name": "Horror"
+      }
+  },
+  {
+      "model": "django_app.Category",
+      "pk": 40,
+      "fields": {
+      "name": "Sci-Fi/Fantasy"
+      }
+  },
+  {
+      "model": "django_app.Category",
+      "pk": 41,
+      "fields": {
+      "name": "Thriller"
+      }
+  },
+  {
+      "model": "django_app.Category",
+      "pk": 42,
+      "fields": {
+      "name": "Shorts"
+      }
+  },
+  {
+      "model": "django_app.Category",
+      "pk": 43,
+      "fields": {
+      "name": "Shows"
+      }
+  },
+  {
+      "model": "django_app.Category",
+      "pk": 44,
+      "fields": {
+      "name": "Trailers"
+      }
+  }
+]
