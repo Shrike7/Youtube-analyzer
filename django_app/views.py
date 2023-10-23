@@ -1,9 +1,11 @@
 from django.shortcuts import render, HttpResponse, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from .forms import JSONUploadForm, CreateUserForm, LoginForm
+
 import json
 from .models.mongo import File, Video, Subtitle
 from .tasks import proceed_video
-from django.contrib.auth import authenticate, login, logout
 
 
 def home(request):
@@ -45,6 +47,12 @@ def login_page(request):
     return render(request, 'login.html', context)
 
 
+def logout_user(request):
+    logout(request)
+    return redirect('login')
+
+
+@login_required(login_url='login')
 def upload_json(request):
     if request.method == 'POST':
         form = JSONUploadForm(request.POST, request.FILES)
