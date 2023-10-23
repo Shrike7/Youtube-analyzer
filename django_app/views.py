@@ -11,6 +11,8 @@ def home(request):
 
 
 def register_page(request):
+    form = CreateUserForm()
+
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
@@ -18,14 +20,14 @@ def register_page(request):
             return redirect('login')
         else:
             pass  # TODO: handle invalid form
-    else:
-        form = CreateUserForm()
 
     context = {'form': form}
     return render(request, 'register.html', context)
 
 
 def login_page(request):
+    form = LoginForm()
+
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -38,8 +40,6 @@ def login_page(request):
                 return redirect('upload_json')
             else:
                 pass  # TODO: handle invalid login
-    else:
-        form = LoginForm()
 
     context = {'form': form}
     return render(request, 'login.html', context)
