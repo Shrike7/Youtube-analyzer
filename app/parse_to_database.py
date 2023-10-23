@@ -1,4 +1,4 @@
-from youtube_requests import get_video_category
+from django_app.youtube_requests import get_video_category
 
 
 def proceed_record_to_db(cursor, video_id, video_name, chanel_id, chanel_name, watch_time, user_id, api_key):

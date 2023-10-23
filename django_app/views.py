@@ -1,12 +1,48 @@
-from django.shortcuts import render, HttpResponse
-from .forms import JSONUploadForm
+from django.shortcuts import render, HttpResponse, redirect
+from .forms import JSONUploadForm, CreateUserForm, LoginForm
 import json
 from .models.mongo import File, Video, Subtitle
 from .tasks import proceed_video
+from django.contrib.auth import authenticate, login, logout
 
 
 def home(request):
     return HttpResponse("HEllo")
+
+
+def register_page(request):
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+        else:
+            pass  # TODO: handle invalid form
+    else:
+        form = CreateUserForm()
+
+    context = {'form': form}
+    return render(request, 'register.html', context)
+
+
+def login_page(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('upload_json')
+            else:
+                pass  # TODO: handle invalid login
+    else:
+        form = LoginForm()
+
+    context = {'form': form}
+    return render(request, 'login.html', context)
 
 
 def upload_json(request):
