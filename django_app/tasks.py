@@ -34,7 +34,7 @@ def proceed_video(file_id_str):
                 chanel_pg = chanels_pg.first()
 
             video_category_id = get_video_category(video_id)
-            category_id = Category.objects.filter(custom_id=video_category_id).first()
+            category_id = Category.objects.filter(id=video_category_id).first()
 
             # Insert video in db
             video_pg = VideoPostgres.objects.create(
