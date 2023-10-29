@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -11,7 +12,7 @@ class Chanel(models.Model):
 
 
 class UserProfile(models.Model):
-    pass
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class Video(models.Model):
