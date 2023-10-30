@@ -67,12 +67,8 @@ def upload_json(request):
             data_list = json.loads(uploaded_file.read().decode('utf-8'))  # TODO: think about encoding format
 
             # Create user profile in postgres
-            user_profile = UserProfile.objects.filter(user_id=request.user.id)
-            if not user_profile.exists():
-                user_profile = UserProfile.objects.create(user_id=request.user)
-                user_profile.save()
-            else:
-                user_profile = user_profile.first()
+            user_profile = UserProfile.objects.create(user_id=request.user)
+            user_profile.save()
 
             file_db = File(user_id=request.user.id, user_profile_id=user_profile.id)
             file_db.save()
