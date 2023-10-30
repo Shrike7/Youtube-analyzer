@@ -11,6 +11,13 @@ from .youtube_requests import get_video_category
 def proceed_video(file_id_str):
     file_object_id = ObjectId(file_id_str)
 
+    # Find file in mongo
+    file = File.objects.filter(id=file_object_id).first()
+    if not file:
+        pass  # TODO: handle error
+
+    user_profile_id = file.user_profile_id
+
     # Find all videos with host=file_id and status False
     videos = VideoMongo.objects.filter(host=file_object_id, status=False)
 
@@ -49,13 +56,15 @@ def proceed_video(file_id_str):
         else:
             # Video is already in db. Check if its same watch record
             video_pg = videos_pg.first()
-            watch_records_pg = WatchRecord.objects.filter(video=video_id, user_profile_id=video.user, time=video.time)
+            watch_records_pg = WatchRecord.objects.filter(
+                video=video_id, user_profile_id=user_profile_id, time=video.time
+            )
             # Skip if same watch record already in db
             if watch_records_pg.exists():
                 continue
 
         # Insert watch record
-        user_profile = UserProfile.objects.filter(id=video.user).first()
+        user_profile = UserProfile.objects.filter(id=user_profile_id).first()
         watch_record_pg = WatchRecord.objects.create(
             time=video.time,
             user_profile=user_profile,

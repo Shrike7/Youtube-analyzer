@@ -4,6 +4,7 @@ from mongoengine import (Document, BooleanField, IntField, ReferenceField,
 
 class File(Document):
     user_id = IntField(required=True)
+    user_profile_id = IntField(required=True)
     status = BooleanField(default=False)
 
 
@@ -14,7 +15,6 @@ class Subtitle(EmbeddedDocument):
 
 class Video(Document):
     status = BooleanField(default=False)
-    user = IntField(required=True)
     host = ReferenceField(File)
     header = StringField()
     title = StringField()
