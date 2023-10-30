@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profiles</title>
+</head>
+<body>
+    <h1>Profiles</h1>
+    {% for file in files %}
+        <div>
+            <!-- ID of file-->
+            <h2>{{ file.id }}</h2>
+            <!-- Status of file: Processing (when False) or Done (when True) -->
+            {% if file.status == False %}
+                <p>Processing</p>
+            {% else %}
+                <p>Done</p>
+            {% endif %}
+            <!-- Visulize button when status is "True" -->
+            {% if file.status == True %}
+                <a href="">Visualize</a>
+            {% endif %}
+            <!-- Remove button-->
+            <a href="">Remove</a>
+        </div>
+    {% endfor %}
+</body>
+</html>

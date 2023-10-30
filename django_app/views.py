@@ -97,3 +97,12 @@ def upload_json(request):
         form = JSONUploadForm()
 
     return render(request, 'upload_json.html', {'form': form})
+
+
+@login_required(login_url='login')
+def profiles_page(request):
+    #  Print list of all user uploaded files with status
+    files = File.objects.filter(user_id=request.user.id)
+
+    context = {'files': files}
+    return render(request, 'profiles.html', context)
