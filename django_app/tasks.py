@@ -7,8 +7,17 @@ from .youtube_requests import get_video_category
 
 
 # TODO: Check for edge cases. Error handling
+# TODO: Check for youtube api token run out
+# TODO: Check for deleted video
+# TODO: Check for youtube music objects
+# TODO: Check for advertisement objects
 @shared_task
 def proceed_video(file_id_str):
+    """Proceed not proceeded videos in file.
+    Get video category from YouTube api.
+    Check if already video, chanel, watch record in postgres db.
+    If not: insert.
+    Update status of video in mongo db."""
     file_object_id = ObjectId(file_id_str)
 
     # Find file in mongo
@@ -22,7 +31,9 @@ def proceed_video(file_id_str):
     videos = VideoMongo.objects.filter(host=file_object_id, status=False)
 
     for video in videos:
+        # Get id after "?v=", https://www.youtube.com/watch?v=2Vm1VQix4AA
         video_id = video.titleUrl.split("=")[-1]
+        # Get id after "channel/", https://www.youtube.com/channel/UCcDj9XqT2YQERsdAnHGR7xg
         chanel_id = video.subtitles[0].url.split('/')[-1]
 
         videos_pg = VideoPostgres.objects.filter(custom_id=video_id)
@@ -40,8 +51,10 @@ def proceed_video(file_id_str):
             else:
                 chanel_pg = chanels_pg.first()
 
+            # Get category id from YouTube api
             video_category_id = get_video_category(video_id)
             category_id = Category.objects.filter(id=video_category_id).first()
+            # TODO: check if user manually changed category to non existing
 
             # Insert video in db
             video_pg = VideoPostgres.objects.create(
@@ -50,17 +63,19 @@ def proceed_video(file_id_str):
                 chanel=chanel_pg,
                 category=category_id
             )
-
             video_pg.save()
 
         else:
-            # Video is already in db. Check if its same watch record
+            # Video is already in db. Check if it's same watch record
             video_pg = videos_pg.first()
             watch_records_pg = WatchRecord.objects.filter(
                 video=video_id, user_profile_id=user_profile_id, time=video.time
             )
             # Skip if same watch record already in db
             if watch_records_pg.exists():
+                # Update status
+                video.status = True
+                video.save()
                 continue
 
         # Insert watch record
@@ -70,9 +85,13 @@ def proceed_video(file_id_str):
             user_profile=user_profile,
             video=video_pg
         )
-
         watch_record_pg.save()
 
         # Update status
         video.status = True
         video.save()
+
+        # We finished all not proceeded videos in file
+        # Update status of file
+        file.status = True
+        file.save()

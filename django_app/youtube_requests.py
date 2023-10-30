@@ -3,6 +3,8 @@ from decouple import config
 
 
 def get_video_category(video_id):
+    """Get video category from request get YouTube api.
+    Return category id."""
     api_key = config("API_KEY")
     get_url = f"https://www.googleapis.com/youtube/v3/videos?key={api_key}&id={video_id}&fields=items(id,snippet(categoryId))&part=snippet"
 
@@ -13,6 +15,7 @@ def get_video_category(video_id):
         # TODO Handle bad api requests
         pass
 
+    # Take only needed info
     category_id = response_json["items"][0]["snippet"]["categoryId"]
-    return category_id
 
+    return category_id

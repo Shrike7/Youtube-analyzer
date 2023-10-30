@@ -14,6 +14,7 @@ def home(request):
 
 
 def register_page(request):
+    """User registration using form."""
     form = CreateUserForm()
 
     if request.method == 'POST':
@@ -29,6 +30,7 @@ def register_page(request):
 
 
 def login_page(request):
+    """User login using form."""
     form = LoginForm()
 
     if request.method == 'POST':
@@ -55,12 +57,14 @@ def logout_user(request):
 
 @login_required(login_url='login')
 def upload_json(request):
+    """User upload json file using form. Json objects are saved in mongo db.
+    Celery task proceed_video is called to proceed videos in json file."""
     if request.method == 'POST':
         form = JSONUploadForm(request.POST, request.FILES)
         if form.is_valid():
             uploaded_file = form.cleaned_data['json_file']
 
-            data_list = json.loads(uploaded_file.read().decode('utf-8'))
+            data_list = json.loads(uploaded_file.read().decode('utf-8'))  # TODO: think about encoding format
 
             # Create user profile in postgres
             user_profile = UserProfile.objects.filter(user_id=request.user.id)
