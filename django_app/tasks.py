@@ -46,41 +46,27 @@ def proceed_video(file_id_str):
 
             video_pg.save()
 
-            # Insert watch record
-            user_profile = UserProfile.objects.filter(id=video.user).first()
-            watch_record_pg = WatchRecord.objects.create(
-                time=video.time,
-                user_profile=user_profile,
-                video=video_pg
-            )
-
-            watch_record_pg.save()
-
-            # Update status
-            video.status = True
-            video.save()
         else:
             # Video is already in db. Check if its same watch record
             video_pg = videos_pg.first()
             watch_records_pg = WatchRecord.objects.filter(video=video_id, user_profile_id=video.user, time=video.time)
-            if not watch_records_pg.exists():
-                # Insert watch record
-                user_profile = UserProfile.objects.filter(id=video.user).first()
-                watch_record_pg = WatchRecord.objects.create(
-                    time=video.time,
-                    user_profile=user_profile,
-                    video=video_pg
-                )
+            # Skip if same watch record already in db
+            if watch_records_pg.exists():
+                continue
 
-                watch_record_pg.save()
+        # Insert watch record
+        user_profile = UserProfile.objects.filter(id=video.user).first()
+        watch_record_pg = WatchRecord.objects.create(
+            time=video.time,
+            user_profile=user_profile,
+            video=video_pg
+        )
 
-                # Update status
-                video.status = True
-                video.save()
-            else:
-                # Watch record already in db
-                pass
-            pass
+        watch_record_pg.save()
+
+        # Update status
+        video.status = True
+        video.save()
 
 
 # {

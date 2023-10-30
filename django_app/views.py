@@ -5,6 +5,7 @@ from .forms import JSONUploadForm, CreateUserForm, LoginForm
 
 import json
 from .models.mongo import File, Video, Subtitle
+from .models.postgres import UserProfile
 from .tasks import proceed_video
 
 
@@ -61,13 +62,21 @@ def upload_json(request):
 
             data_list = json.loads(uploaded_file.read().decode('utf-8'))
 
-            file_db = File(user_id=1)  # TODO: change to actual user id
+            # Create user profile in postgres
+            user_profile = UserProfile.objects.filter(user=request.user.id)
+            if not user_profile.exists():
+                user_profile = UserProfile.objects.create(user=request.user)
+                user_profile.save()
+            else:
+                user_profile = user_profile.first()
+
+            file_db = File(user_id=user_profile.id)
             file_db.save()
 
             for data in data_list:
                 video_db = Video(
                     host=file_db.id,
-                    user=1,  # TODO: change to actual user id
+                    user=user_profile.id,
                     header=data['header'],
                     title=data['title'],
                     titleUrl=data['titleUrl'],
@@ -80,6 +89,7 @@ def upload_json(request):
                     subtitle_db = Subtitle(name=subtitle['name'], url=subtitle['url'])
                     video_db.subtitles.append(subtitle_db)
                 video_db.save()
+
 
             # Run celery task to proceed videos
             proceed_video.delay(str(file_db.id))
