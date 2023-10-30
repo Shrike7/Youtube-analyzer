@@ -67,17 +67,3 @@ def proceed_video(file_id_str):
         # Update status
         video.status = True
         video.save()
-
-
-# {
-#   "header": "YouTube",
-#   "title": "Watched Dad Jokes | Don\u0027t laugh Challenge | Best Moments 2 | Raise Your Spirits",
-#   "titleUrl": "https://www.youtube.com/watch?v\u003d2Vm1VQix4AA",
-#   "subtitles": [{
-#     "name": "YeahMad",
-#     "url": "https://www.youtube.com/channel/UCcDj9XqT2YQERsdAnHGR7xg"
-#   }],
-#   "time": "2023-08-15T08:49:17.849Z",
-#   "products": ["YouTube"],
-#   "activityControls": ["YouTube watch history"]
-# }
