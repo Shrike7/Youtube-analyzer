@@ -5,9 +5,10 @@ from .forms import JSONUploadForm, CreateUserForm, LoginForm
 
 import json
 from .models.mongo import File, Video, Subtitle
-from .models.postgres import UserProfile
+from .models.postgres import UserProfile, WatchRecord, Video, Chanel, Category
 from .tasks import proceed_video
 
+import plotly.graph_objs as go
 
 def home(request):
     return HttpResponse("HEllo")
@@ -110,8 +111,25 @@ def profiles_page(request):
 
 @login_required(login_url='login')
 def visualize_profile(request, profile_id):
+    # Get all watch records for profile
+    profile_watch_records = WatchRecord.objects.filter(user_profile_id=profile_id)
 
-    return HttpResponse(f'Profile with file_id: {profile_id}')
+    # Join with Video Chanel and Category
+    profile_watch_records = profile_watch_records.select_related('video')
+    profile_watch_records = profile_watch_records.select_related('video__chanel')
+    profile_watch_records = profile_watch_records.select_related('video__category')
+
+    # Take only needed columns
+    # WatchRecord time, Video name, Chanel name, Category name
+    profile_watch_records = profile_watch_records.values(
+        'time', 'video__name', 'video__chanel__name', 'video__category__name'
+    )
+
+    # Convert to list
+    profile_watch_records = list(profile_watch_records)
+
+    context = {'profile_watch_records': profile_watch_records}
+    return render(request, 'visualize_profile.html', context)
 
 
 @login_required(login_url='login')
