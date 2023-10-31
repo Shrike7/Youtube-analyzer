@@ -5,8 +5,11 @@ import plotly.express as px
 def category_trend_chart(df):
     """Watched videos by categories for all period"""
 
-    # Group by category and count by month.
-    df = df.groupby(['video__category__name', df['time'].dt.strftime('%Y-%m')]).size().to_frame('nr_of_watched_videos').reset_index()
+    # Floor time to day
+    df['time'] = df['time'].dt.floor('d')
+
+    # Group by category and time and count. Only category name, time and count columns
+    df = df.groupby(['video__category__name', 'time']).size().to_frame('nr_of_watched_videos').reset_index()
 
     fig = px.line(
         df,
@@ -16,13 +19,12 @@ def category_trend_chart(df):
         labels={
             'video__category__name': 'Category',
             'nr_of_watched_videos': 'Number of watched videos',
-            'time': 'Month'
+            'time': 'Days'
         },
         title='Watched videos by categories for all period',
     )
 
     return fig
-
 
 
 def category_total_watched_chart(df):
