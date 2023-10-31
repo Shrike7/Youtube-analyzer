@@ -106,3 +106,15 @@ def profiles_page(request):
 
     context = {'files': files}
     return render(request, 'profiles.html', context)
+
+
+@login_required(login_url='login')
+def visualize_profile(request, profile_id):
+
+    return HttpResponse(f'Profile with file_id: {profile_id}')
+
+
+@login_required(login_url='login')
+def delete_profile(request, profile_id):
+
+    return HttpResponse(f'Profile with file_id: {profile_id} deleted')
