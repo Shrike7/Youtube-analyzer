@@ -38,6 +38,15 @@ def proceed_video(file_id_str):
 
         videos_pg = VideoPostgres.objects.filter(custom_id=video_id)
         if not videos_pg.exists():
+            # Get category id from YouTube api
+            video_category_id = get_video_category(video_id)
+            if video_category_id is None:
+                print(f"Video {video_id} will be deleted from mongo")
+                video.delete()
+                continue
+            category_id = Category.objects.filter(id=video_category_id).first()
+            # TODO: check if user manually changed category to non existing
+
             # Check if chanel already in db
             chanels_pg = Chanel.objects.filter(custom_id=chanel_id)
             chanel_pg = None
@@ -50,11 +59,6 @@ def proceed_video(file_id_str):
                 chanel_pg.save()
             else:
                 chanel_pg = chanels_pg.first()
-
-            # Get category id from YouTube api
-            video_category_id = get_video_category(video_id)
-            category_id = Category.objects.filter(id=video_category_id).first()
-            # TODO: check if user manually changed category to non existing
 
             # Insert video in db
             video_pg = VideoPostgres.objects.create(
@@ -91,6 +95,10 @@ def proceed_video(file_id_str):
         video.status = True
         video.save()
 
+    # Check if there is not proceeded videos in file
+    videos = VideoMongo.objects.filter(host=file_object_id, status=False)
+    if len(videos) == 0:
+        print("All videos proceeded")
         # We finished all not proceeded videos in file
         # Update status of file
         file.status = True

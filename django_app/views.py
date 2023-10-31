@@ -76,6 +76,13 @@ def upload_json(request):
             file_db.save()
 
             for data in data_list:
+                # Check if ActivityControls is YouTube watch history
+                if data['activityControls'][0] != 'YouTube watch history':
+                    continue
+                # Skip if there is details
+                if 'details' in data:
+                    continue
+
                 video_db = Video(
                     host=file_db.id,
                     header=data['header'],
