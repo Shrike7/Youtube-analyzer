@@ -9,7 +9,7 @@ from .models.postgres import UserProfile, WatchRecord
 from .tasks import proceed_video
 
 from django_pandas.io import read_frame
-from .chart_generation import category_trend_chart, category_total_watched_chart
+from .chart_generation import category_trend_chart, category_total_watched_chart, category_trend_chart
 
 def home(request):
     return HttpResponse("HEllo")
@@ -128,9 +128,13 @@ def visualize_profile(request, profile_id):
 
     df = read_frame(profile_watch_records)
 
-    category_trend = category_total_watched_chart(df).to_html(full_html=False, include_plotlyjs='cdn')
+    category_total_watched = category_total_watched_chart(df).to_html(full_html=False, include_plotlyjs='cdn')
+    category_trend = category_trend_chart(df).to_html(full_html=False, include_plotlyjs='cdn')
 
-    context = {'category_trend': category_trend}
+    context = {
+        'category_trend': category_trend,
+        'category_total_watched': category_total_watched
+    }
     return render(request, 'visualize_profile.html', context)
 
 
