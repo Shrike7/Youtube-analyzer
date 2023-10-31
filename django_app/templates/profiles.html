@@ -19,10 +19,13 @@
             {% endif %}
             <!-- Visulize button when status is "True" -->
             {% if file.status == True %}
-                <a href="">Visualize</a>
+                <a href="{% url 'visualize' profile_id=file.user_profile_id %}">Visualize</a>
             {% endif %}
-            <!-- Remove button-->
-            <a href="">Remove</a>
+            <!-- Remove button -->
+            <form method="post" action="{% url 'delete_profile' profile_id=file.user_profile_id %}">
+                {% csrf_token %}
+                <button type="submit">Delete Profile</button>
+            </form>
         </div>
     {% endfor %}
 </body>
