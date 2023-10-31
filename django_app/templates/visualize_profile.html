@@ -7,13 +7,8 @@
 </head>
 <body>
     <h1>Visualize Profile</h1>
-    {% for record in profile_watch_records %}
-        <p>Watched at: {{ record.time }}</p>
-        <p>Video name: {{ record.video__name }}</p>
-        <p>Chanel name: {{ record.video__chanel__name }}</p>
-        <p>Category name: {{ record.video__category__name }}</p>
-
-        <hr>
-    {% endfor %}
+    <div id="plotly-chart">
+        {{ category_trend|safe }}
+    </div>
 </body>
 </html>
