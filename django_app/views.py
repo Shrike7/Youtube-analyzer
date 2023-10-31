@@ -5,10 +5,11 @@ from .forms import JSONUploadForm, CreateUserForm, LoginForm
 
 import json
 from .models.mongo import File, Video, Subtitle
-from .models.postgres import UserProfile, WatchRecord, Video, Chanel, Category
+from .models.postgres import UserProfile, WatchRecord
 from .tasks import proceed_video
 
-import plotly.graph_objs as go
+from django_pandas.io import read_frame
+from .chart_generation import category_trend_chart, category_total_watched_chart
 
 def home(request):
     return HttpResponse("HEllo")
@@ -125,10 +126,11 @@ def visualize_profile(request, profile_id):
         'time', 'video__name', 'video__chanel__name', 'video__category__name'
     )
 
-    # Convert to list
-    profile_watch_records = list(profile_watch_records)
+    df = read_frame(profile_watch_records)
 
-    context = {'profile_watch_records': profile_watch_records}
+    category_trend = category_total_watched_chart(df).to_html(full_html=False, include_plotlyjs='cdn')
+
+    context = {'category_trend': category_trend}
     return render(request, 'visualize_profile.html', context)
 
 
