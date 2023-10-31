@@ -116,5 +116,22 @@ def visualize_profile(request, profile_id):
 
 @login_required(login_url='login')
 def delete_profile(request, profile_id):
+    """Delete user profile.
+    Remove watch records from postgres.
+    Remove file related to profile from mongo."""
 
-    return HttpResponse(f'Profile with file_id: {profile_id} deleted')
+    # Delete profile from postgres. All watch records will be deleted by cascade
+    user_profile = UserProfile.objects.get(id=profile_id)  # TODO: handle not found
+    user_profile.delete()
+
+    # Find file that have user_profile_id
+    files = File.objects.filter(user_profile_id=profile_id)
+    for file in files:
+        # Find and remove all Videos that have host=file.id
+        videos = Video.objects.filter(host=file.id)
+        for video in videos:
+            video.delete()
+
+        file.delete()
+
+    return redirect('profiles')
