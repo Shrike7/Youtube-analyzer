@@ -137,6 +137,9 @@ def visualize_profile(request, profile_id):
 
     df = read_frame(profile_watch_records)
 
+    # For all time change timezone to user timezone
+    df['time'] = df['time'].dt.tz_convert('Europe/Prague')  # TODO: get user timezone
+
     category_total_watched = category_total_watched_chart(df).to_html(full_html=False, include_plotlyjs='cdn')
     category_trend = category_trend_chart(df).to_html(full_html=False, include_plotlyjs='cdn')
     day_hours_trend = day_hours_trend_chart(df).to_html(full_html=False, include_plotlyjs='cdn')
