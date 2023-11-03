@@ -83,7 +83,8 @@ def day_hours_trend_chart(df):
 
 
 def watched_again_top_chart(df):
-    """What videos have you watched the most over and over again?"""
+    """What videos have you watched the most over and over again?
+    Top 10"""
 
     # Copy df because we will change it
     df = df.copy()
