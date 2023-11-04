@@ -187,3 +187,41 @@ def day_of_week_trend_chart(df):
     )
 
     return fig
+
+
+def is_weekend_category_trend_chart(df):
+    """Category trend for weekend and weekdays"""
+
+    # Copy df because we will change it
+    df = df.copy()
+
+    # Convert time to day of week
+    df['time'] = df['time'].dt.weekday
+
+    # Add column to check if day is weekend
+    df['is_weekend'] = df['time'].isin([5, 6])
+
+    # Group by category, is_weekend and count. Only category name, is_weekend and count columns
+    df = df.groupby(['video__category__name', 'is_weekend']).size().to_frame('nr_of_watched_videos').reset_index()
+
+    # Change is_weekend False to Weekday and True to Weekend
+    df['is_weekend'] = df['is_weekend'].map({False: 'Weekday', True: 'Weekend'})
+
+    # Plotly bar chart
+    fig = px.bar(
+        df,
+        x='is_weekend',
+        y='nr_of_watched_videos',
+        color='video__category__name',
+        labels={
+            'video__category__name': 'Category',
+            'nr_of_watched_videos': 'Number of watched videos',
+            'is_weekend': 'Is weekend'
+        },
+        barmode='group',
+        text='video__category__name',
+
+        title='Category trend for weekend and weekdays',
+    )
+
+    return fig
