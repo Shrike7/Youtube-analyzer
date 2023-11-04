@@ -10,7 +10,8 @@ from .tasks import proceed_video
 
 from django_pandas.io import read_frame
 from .chart_generation import (category_total_watched_chart, category_trend_chart,
-                               day_hours_trend_chart, watched_again_top_chart)
+                               day_hours_trend_chart, watched_again_top_chart,
+                               videos_by_channels_chart)
 
 
 def home(request):
@@ -144,12 +145,14 @@ def visualize_profile(request, profile_id):
     category_trend = category_trend_chart(df).to_html(full_html=False, include_plotlyjs='cdn')
     day_hours_trend = day_hours_trend_chart(df).to_html(full_html=False, include_plotlyjs='cdn')
     watched_again_top = watched_again_top_chart(df).to_html(full_html=False, include_plotlyjs='cdn')
+    videos_by_channels = videos_by_channels_chart(df).to_html(full_html=False, include_plotlyjs='cdn')
 
     context = {
         'category_trend': category_trend,
         'category_total_watched': category_total_watched,
         'day_hours_trend': day_hours_trend,
         'watched_again_top': watched_again_top,
+        'videos_by_channels': videos_by_channels,
     }
     return render(request, 'visualize_profile.html', context)
 
