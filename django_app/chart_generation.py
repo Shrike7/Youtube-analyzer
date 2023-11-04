@@ -116,7 +116,7 @@ def watched_again_top_chart(df):
 
 def videos_by_channels_chart(df):
     """Watched videos by YouTube channels
-    Top 30"""
+    Top 10"""
 
     # Copy df because we will change it
     df = df.copy()
@@ -127,8 +127,8 @@ def videos_by_channels_chart(df):
     # Order by count
     df = df.sort_values('nr_of_watched_videos', ascending=False)
 
-    # Take only top 30
-    df = df.head(30)
+    # Take only top 10
+    df = df.head(10)
 
     # Rotated bar chart
     fig = px.bar(
