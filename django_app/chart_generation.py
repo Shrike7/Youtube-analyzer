@@ -148,3 +148,42 @@ def videos_by_channels_chart(df):
     )
 
     return fig
+
+
+def day_of_week_trend_chart(df):
+    """Weakwise comaprison of total number of watched videos"""
+
+    # Copy df because we will change it
+    df = df.copy()
+
+    # Group by day of week and count. Only day of week and count columns
+    df['time'] = df['time'].dt.weekday
+    df = df.groupby(df['time']).size().to_frame('nr_of_watched_videos').reset_index()
+
+    # Create a mapping dictionary for weekday names
+    weekday_mapping = {
+        0: 'Monday',
+        1: 'Tuesday',
+        2: 'Wednesday',
+        3: 'Thursday',
+        4: 'Friday',
+        5: 'Saturday',
+        6: 'Sunday'
+    }
+
+    # Replace weekday number with weekday name
+    df['time'] = df['time'].map(weekday_mapping)
+
+    # Plotly bar chart
+    fig = px.bar(
+        df,
+        x='time',
+        y='nr_of_watched_videos',
+        labels={
+            'time': 'Day of week',
+            'nr_of_watched_videos': 'Number of watched videos'
+        },
+        title='Weakwise comaprison of total number of watched videos',
+    )
+
+    return fig
