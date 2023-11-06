@@ -109,7 +109,8 @@ def upload_json(request):
     else:
         form = JSONUploadForm()
 
-    return render(request, 'upload_json.html', {'form': form})
+    context = {'form': form}
+    return render(request, 'upload_json.html', context)
 
 
 @login_required(login_url='login')
@@ -142,22 +143,14 @@ def visualize_profile(request, profile_id):
     # For all time change timezone to user timezone
     df['time'] = df['time'].dt.tz_convert('Europe/Prague')  # TODO: get user timezone
 
-    category_total_watched = category_total_watched_chart(df).to_html(full_html=False, include_plotlyjs='cdn')
-    category_trend = category_trend_chart(df).to_html(full_html=False, include_plotlyjs='cdn')
-    day_hours_trend = day_hours_trend_chart(df).to_html(full_html=False, include_plotlyjs='cdn')
-    watched_again_top = watched_again_top_chart(df).to_html(full_html=False, include_plotlyjs='cdn')
-    videos_by_channels = videos_by_channels_chart(df).to_html(full_html=False, include_plotlyjs='cdn')
-    day_of_week_trend = day_of_week_trend_chart(df).to_html(full_html=False, include_plotlyjs='cdn')
-    is_weekend_category_trend = is_weekend_category_trend_chart(df).to_html(full_html=False, include_plotlyjs='cdn')
-
     context = {
-        'category_trend': category_trend,
-        'category_total_watched': category_total_watched,
-        'day_hours_trend': day_hours_trend,
-        'watched_again_top': watched_again_top,
-        'videos_by_channels': videos_by_channels,
-        'day_of_week_trend': day_of_week_trend,
-        'is_weekend_category_trend': is_weekend_category_trend,
+        'category_trend': category_trend_chart(df).to_html(full_html=False, include_plotlyjs='cdn'),
+        'category_total_watched': category_total_watched_chart(df).to_html(full_html=False, include_plotlyjs='cdn'),
+        'day_hours_trend': day_hours_trend_chart(df).to_html(full_html=False, include_plotlyjs='cdn'),
+        'watched_again_top': watched_again_top_chart(df).to_html(full_html=False, include_plotlyjs='cdn'),
+        'videos_by_channels': videos_by_channels_chart(df).to_html(full_html=False, include_plotlyjs='cdn'),
+        'day_of_week_trend': day_of_week_trend_chart(df).to_html(full_html=False, include_plotlyjs='cdn'),
+        'is_weekend_category_trend': is_weekend_category_trend_chart(df).to_html(full_html=False, include_plotlyjs='cdn'),
     }
     return render(request, 'visualize_profile.html', context)
 
