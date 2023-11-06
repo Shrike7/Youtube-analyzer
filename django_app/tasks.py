@@ -1,6 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task
-from .models.mongo import File, Video as VideoMongo, Subtitle
+from .models.mongo import File, Video as VideoMongo
 from .models.postgres import Category, Chanel, UserProfile, Video as VideoPostgres, WatchRecord
 from bson import ObjectId
 from .youtube_requests import get_video_category

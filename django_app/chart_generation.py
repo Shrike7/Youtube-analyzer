@@ -1,4 +1,3 @@
-import django_pandas.io as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
