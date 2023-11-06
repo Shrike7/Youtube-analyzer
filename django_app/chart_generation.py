@@ -150,7 +150,7 @@ def videos_by_channels_chart(df):
 
 
 def day_of_week_trend_chart(df):
-    """Weakwise comaprison of total number of watched videos"""
+    """Weak-wise comparison of total number of watched videos"""
 
     # Copy df because we will change it
     df = df.copy()
@@ -182,7 +182,7 @@ def day_of_week_trend_chart(df):
             'time': 'Day of week',
             'nr_of_watched_videos': 'Number of watched videos'
         },
-        title='Weakwise comaprison of total number of watched videos',
+        title='Weak-wise comparison of total number of watched videos',
     )
 
     return fig
