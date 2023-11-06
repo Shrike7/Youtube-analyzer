@@ -115,6 +115,9 @@ def upload_json(request):
 
 @login_required(login_url='login')
 def profiles_page(request):
+    """User uploaded files list.
+    User can delete or visualize file.
+    Status of file processing is shown."""
     #  Print list of all user uploaded files with status
     files = File.objects.filter(user_id=request.user.id)
 
@@ -124,6 +127,8 @@ def profiles_page(request):
 
 @login_required(login_url='login')
 def visualize_profile(request, profile_id):
+    """Visualize user data from postgres.
+    Generate and render charts."""
     # Get all watch records for profile
     profile_watch_records = WatchRecord.objects.filter(user_profile_id=profile_id)
 
