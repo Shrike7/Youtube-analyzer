@@ -1,13 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualize Profile</title>
-</head>
-<body>
-    <h1>Visualize Profile</h1>
-    <div id="plotly-chart">
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %}Visualize Profile{% endblock title %}
+
+{% block content %}
+    <div class="container mx-auto">
+        <h1>Visualize Profile</h1>
+
         {{ category_trend|safe }}
         {{ category_total_watched|safe }}
         {{ day_hours_trend|safe}}
@@ -16,5 +15,4 @@
         {{ day_of_week_trend|safe}}
         {{ is_weekend_category_trend|safe}}
     </div>
-</body>
-</html>
+{% endblock %}

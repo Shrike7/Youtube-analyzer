@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+    <div class="container mx-auto">
+        <h1>Home</h1>
+        <p>Welcome to the home page!</p>
+
+        <a href="{% url 'login' %}" class="btn btn-primary" >Login</a>
+        <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
+        <a href="{% url 'profiles' %}" class="btn btn-primary">Profile</a>
+        <a href="{% url 'upload_json' %}" class="btn btn-primary">Upload</a>
+    </div>
+{% endblock %}

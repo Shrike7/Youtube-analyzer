@@ -16,7 +16,7 @@ from .chart_generation import (category_total_watched_chart, category_trend_char
 
 
 def home(request):
-    return HttpResponse("HEllo")
+    return render(request, 'home.html')
 
 
 def register_page(request):
@@ -105,7 +105,7 @@ def upload_json(request):
             # Run celery task to proceed videos
             proceed_video.delay(str(file_db.id))
 
-            return HttpResponse("File uploaded")
+            return redirect('profiles')
     else:
         form = JSONUploadForm()
 

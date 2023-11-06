@@ -1,16 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload JSON File</title>
-</head>
-<body>
-    <h1>Upload a JSON File</h1>
-    <form action="{% url 'upload_json' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Submit">
-    </form>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %}Upload JSON File{% endblock title %}
+
+{% block content %}
+    <div class="container mx-auto">
+        <h1>Upload a JSON File</h1>
+        <form action="{% url 'upload_json' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.json_file.label_tag }}
+                {{ form.json_file }}
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+    </div>
+{% endblock %}

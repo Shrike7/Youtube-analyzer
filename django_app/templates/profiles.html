@@ -1,32 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profiles</title>
-</head>
-<body>
-    <h1>Profiles</h1>
-    {% for file in files %}
-        <div>
-            <!-- ID of file-->
-            <h2>{{ file.id }}</h2>
-            <!-- Status of file: Processing (when False) or Done (when True) -->
-            {% if file.status == False %}
-                <p>Processing</p>
-            {% else %}
-                <p>Done</p>
-            {% endif %}
-            <!-- Visulize button when status is "True" -->
-            {% if file.status == True %}
-                <a href="{% url 'visualize' profile_id=file.user_profile_id %}">Visualize</a>
-            {% endif %}
-            <!-- Remove button -->
-            <form method="post" action="{% url 'delete_profile' profile_id=file.user_profile_id %}">
-                {% csrf_token %}
-                <button type="submit">Delete Profile</button>
-            </form>
-        </div>
-    {% endfor %}
-</body>
-</html>
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %}Profiles{% endblock title %}
+
+{% block content %}
+    <div class="container mx-auto">
+        {% for file in files %}
+            <div class="mb-5">
+                <h2 class="text-primary">{{ file.id }}</h2>
+                {% if file.status == False %}
+                    <p class="text-danger">Processing</p>
+                {% else %}
+                    <p class="text-success">Done</p>
+                {% endif %}
+                <div class="d-flex align-items-center">
+                    {% if file.status == True %}
+                        <a href="{% url 'visualize' profile_id=file.user_profile_id %}" class="btn btn-primary">Visualize</a>
+                    {% endif %}
+                    <form method="post" action="{% url 'delete_profile' profile_id=file.user_profile_id %}" class="ms-3">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete Profile</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
