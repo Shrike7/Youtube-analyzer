@@ -8,8 +8,13 @@
         <h1>Home</h1>
         <p>Welcome to the home page!</p>
 
-        <a href="{% url 'login' %}" class="btn btn-primary" >Login</a>
-        <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
+        {% if user.is_authenticated %}
+            <p>Hello {{ user.username }}!</p>
+            <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-primary" >Login</a>
+            <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
+        {% endif %}
         <a href="{% url 'profiles' %}" class="btn btn-primary">Profile</a>
         <a href="{% url 'upload_json' %}" class="btn btn-primary">Upload</a>
     </div>
