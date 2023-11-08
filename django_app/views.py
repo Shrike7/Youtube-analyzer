@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .forms import JSONUploadForm, CreateUserForm, LoginForm
 
 import json
@@ -21,15 +22,26 @@ def home(request):
 
 def register_page(request):
     """User registration using form."""
-    form = CreateUserForm()
+    if request.user.is_authenticated:
+        return redirect('home')
+    else:
+        form = CreateUserForm()
 
-    if request.method == 'POST':
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login')
-        else:
-            pass  # TODO: handle invalid form
+        if request.method == 'POST':
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                form.save()
+
+                # Login user after registration
+                new_user = authenticate(request,
+                                        username=form.cleaned_data['username'],
+                                        password=form.cleaned_data['password1'])
+                login(request, new_user)
+
+                return redirect('home')
+            else:
+                messages.error(request, 'Form is not valid')
+                return redirect('register')
 
     context = {'form': form}
     return render(request, 'register.html', context)
@@ -37,20 +49,24 @@ def register_page(request):
 
 def login_page(request):
     """User login using form."""
-    form = LoginForm()
+    if request.user.is_authenticated:
+        return redirect('home')
+    else:
+        form = LoginForm()
 
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+        if request.method == 'POST':
+            form = LoginForm(request.POST)
+            if form.is_valid():
+                username = form.cleaned_data['username']
+                password = form.cleaned_data['password']
 
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('upload_json')
-            else:
-                pass  # TODO: handle invalid login
+                user = authenticate(request, username=username, password=password)
+                if user is not None:
+                    login(request, user)
+                    return redirect('upload_json')
+                else:
+                    messages.error(request, 'Username or password is incorrect')
+                    return redirect('login')
 
     context = {'form': form}
     return render(request, 'login.html', context)
