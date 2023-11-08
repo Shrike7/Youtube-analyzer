@@ -9,8 +9,6 @@
 
     {% bootstrap_javascript %}
 
-    {% bootstrap_messages %}
-
     <title>{% block title %}{% endblock title %}</title>
 
 </head>
@@ -33,6 +31,8 @@
         </ul>
       </div>
     </nav>
+
+    {% bootstrap_messages %}
 
     {% block content %}
 
