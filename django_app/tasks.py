@@ -6,11 +6,6 @@ from bson import ObjectId
 from .youtube_requests import get_video_category
 
 
-# TODO: Check for edge cases. Error handling
-# TODO: Check for youtube api token run out
-# TODO: Check for deleted video
-# TODO: Check for youtube music objects
-# TODO: Check for advertisement objects
 @shared_task
 def proceed_video(file_id_str):
     """Proceed not proceeded videos in file.
