@@ -4,6 +4,10 @@ from .models.mongo import File, Video as VideoMongo
 from .models.postgres import Category, Chanel, UserProfile, Video as VideoPostgres, WatchRecord
 from bson import ObjectId
 from .youtube_requests import get_video_category
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 @shared_task
@@ -19,7 +23,7 @@ def proceed_video(file_id_str):
     file = File.objects.filter(id=file_object_id).first()
     if not file:
         # Probably file was deleted before task started
-        # TODO: print log message
+        logger.info(f"File {file_id_str} not found in mongo. Task stopped.")
         return
 
     user_profile_id = file.user_profile_id
@@ -41,18 +45,19 @@ def proceed_video(file_id_str):
             if video_category_id is None:
                 # Probably Ytb api quota run out
                 # Stop task. We will try again later
+                logger.info(f"Ytb api quota run out. Task stopped.")
                 return
 
             if video_category_id == 0:
-                print(f"Video not found. Video {video_id} will be deleted from mongo")
+                logger.info(f"Video not found. Video {video_id} will be deleted from mongo")
                 video.delete()
                 continue
 
             category_id = Category.objects.filter(id=video_category_id)
             if not category_id:
                 # Yb category is always predefined in db
-                # TODO: print log message
                 # Almost impossible to get here
+                logger.error(f"Category {video_category_id} not found in db")
                 return
 
             category_id = category_id.first()
@@ -109,9 +114,9 @@ def proceed_video(file_id_str):
     # Check if there is no proceeded videos left in the file
     videos = VideoMongo.objects.filter(host=file_object_id, status=False)
     if len(videos) == 0:
-        print("All videos proceeded")
         # Congrats!
         # We finished all not proceeded videos in file
         # Update status of file
         file.status = True
         file.save()
+        logger.info(f"All videos in file {file_id_str} proceeded. File status updated.")
