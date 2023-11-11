@@ -111,10 +111,11 @@ def proceed_video(file_id_str):
         video.status = True
         video.save()
 
-    # Check if there is not proceeded videos in file
+    # Check if there is no proceeded videos left in the file
     videos = VideoMongo.objects.filter(host=file_object_id, status=False)
     if len(videos) == 0:
         print("All videos proceeded")
+        # Congrats!
         # We finished all not proceeded videos in file
         # Update status of file
         file.status = True
