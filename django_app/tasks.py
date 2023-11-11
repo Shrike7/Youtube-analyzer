@@ -52,8 +52,15 @@ def proceed_video(file_id_str):
                 print(f"Video not found. Video {video_id} will be deleted from mongo")
                 video.delete()
                 continue
-            category_id = Category.objects.filter(id=video_category_id).first()
-            # TODO: check if user manually changed category to non existing
+
+            category_id = Category.objects.filter(id=video_category_id)
+            if not category_id:
+                # Yb category is always predefined in db
+                # TODO: print log message
+                # Almost impossible to get here
+                return
+
+            category_id = category_id.first()
 
             # Check if chanel already in db
             chanels_pg = Chanel.objects.filter(custom_id=chanel_id)
