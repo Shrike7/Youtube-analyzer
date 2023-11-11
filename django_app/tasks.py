@@ -85,7 +85,8 @@ def proceed_video(file_id_str):
             video_pg.save()
 
         else:
-            # Video is already in db. Check if it's same watch record
+            # Video is already in db.
+            # Check if it's same watch record
             video_pg = videos_pg.first()
             watch_records_pg = WatchRecord.objects.filter(
                 video=video_id, user_profile_id=user_profile_id, time=video.time
