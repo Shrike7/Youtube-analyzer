@@ -63,23 +63,23 @@ def proceed_video(file_id_str):
             category_id = category_id.first()
 
             # Check if chanel already in db
-            chanels_pg = Chanel.objects.filter(custom_id=chanel_id)
-            chanel_pg = None
-            if not chanels_pg.exists():
+            channels_pg = Chanel.objects.filter(custom_id=chanel_id)
+            channel_pg = None
+            if not channels_pg.exists():
                 # Insert chanel in db
-                chanel_pg = Chanel.objects.create(
+                channel_pg = Chanel.objects.create(
                     custom_id=chanel_id,
                     name=video.subtitles[0].name
                 )
-                chanel_pg.save()
+                channel_pg.save()
             else:
-                chanel_pg = chanels_pg.first()
+                channel_pg = channels_pg.first()
 
             # Insert video in db
             video_pg = VideoPostgres.objects.create(
                 custom_id=video_id,
                 name=video.title,
-                chanel=chanel_pg,
+                chanel=channel_pg,
                 category=category_id
             )
             video_pg.save()
