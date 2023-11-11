@@ -8,8 +8,8 @@ import json
 from .models.mongo import File, Video, Subtitle
 from .models.postgres import UserProfile, WatchRecord
 from .tasks import proceed_video
+from .utils import proceed_json_video_data, get_dataframe_to_visualize
 
-from django_pandas.io import read_frame
 from .chart_generation import (category_total_watched_chart, category_trend_chart,
                                day_hours_trend_chart, watched_again_top_chart,
                                videos_by_channels_chart, day_of_week_trend_chart,
@@ -96,27 +96,7 @@ def upload_json(request):
             file_db.save()
 
             for data in data_list:
-                # Check if ActivityControls is YouTube watch history
-                if data['activityControls'][0] != 'YouTube watch history':
-                    continue
-                # Skip if there is details
-                if 'details' in data:
-                    continue
-
-                video_db = Video(
-                    host=file_db.id,
-                    header=data['header'],
-                    title=data['title'],
-                    titleUrl=data['titleUrl'],
-                    time=data['time'],
-                    products=data['products'],
-                    activityControls=data['activityControls'],
-                )
-                video_db.save()
-                for subtitle in data['subtitles']:
-                    subtitle_db = Subtitle(name=subtitle['name'], url=subtitle['url'])
-                    video_db.subtitles.append(subtitle_db)
-                video_db.save()
+                proceed_json_video_data(file_db, data)
 
             # Run celery task to proceed videos
             proceed_video.delay(str(file_db.id))
@@ -145,24 +125,7 @@ def profiles_page(request):
 def visualize_profile(request, profile_id):
     """Visualize user data from postgres.
     Generate and render charts."""
-    # Get all watch records for profile
-    profile_watch_records = WatchRecord.objects.filter(user_profile_id=profile_id)
-
-    # Join with Video Chanel and Category
-    profile_watch_records = profile_watch_records.select_related('video')
-    profile_watch_records = profile_watch_records.select_related('video__chanel')
-    profile_watch_records = profile_watch_records.select_related('video__category')
-
-    # Take only needed columns
-    # WatchRecord time, Video name, Chanel name, Category name
-    profile_watch_records = profile_watch_records.values(
-        'time', 'video__name', 'video__chanel__name', 'video__category__name'
-    )
-
-    df = read_frame(profile_watch_records)
-
-    # For all time change timezone to user timezone
-    df['time'] = df['time'].dt.tz_convert('Europe/Prague')  # TODO: get user timezone
+    df = get_dataframe_to_visualize(profile_id)
 
     context = {
         'category_trend': category_trend_chart(df).to_html(full_html=False, include_plotlyjs='cdn'),
