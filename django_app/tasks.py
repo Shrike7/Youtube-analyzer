@@ -23,7 +23,9 @@ def proceed_video(file_id_str):
     # Find file in mongo
     file = File.objects.filter(id=file_object_id).first()
     if not file:
-        pass  # TODO: handle error
+        # Probably file was deleted before task started
+        # TODO: print log message
+        return
 
     user_profile_id = file.user_profile_id
 
