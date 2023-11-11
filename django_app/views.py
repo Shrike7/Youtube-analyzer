@@ -145,8 +145,18 @@ def delete_profile(request, profile_id):
     Remove watch records from postgres.
     Remove file related to profile from mongo."""
 
+    user_profile = UserProfile.objects.get(id=profile_id)
+    # Check if profile exists
+    if user_profile is None:
+        messages.error(request, 'Profile does not exist')
+        return redirect('profiles')
+
+    # Check if profile belongs to user
+    if user_profile.user_id != request.user:
+        messages.error(request, 'You can not manage this profile')
+        return redirect('profiles')
+
     # Delete profile from postgres. All watch records will be deleted by cascade
-    user_profile = UserProfile.objects.get(id=profile_id)  # TODO: handle not found
     user_profile.delete()
 
     # Find file that have user_profile_id
