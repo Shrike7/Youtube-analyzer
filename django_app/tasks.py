@@ -42,8 +42,14 @@ def proceed_video(file_id_str):
         if not videos_pg.exists():
             # Get category id from YouTube api
             video_category_id = get_video_category(video_id)
+
             if video_category_id is None:
-                print(f"Video {video_id} will be deleted from mongo")
+                # Probably Ytb api quota run out
+                # Stop task. We will try again later
+                return
+
+            if video_category_id == 0:
+                print(f"Video not found. Video {video_id} will be deleted from mongo")
                 video.delete()
                 continue
             category_id = Category.objects.filter(id=video_category_id).first()
