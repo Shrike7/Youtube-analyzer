@@ -5,6 +5,7 @@ from .models.postgres import Category, Chanel, UserProfile, Video as VideoPostgr
 from bson import ObjectId
 from .youtube_requests import get_video_category
 import logging
+from django.utils import timezone
 
 
 logger = logging.getLogger(__name__)
@@ -89,7 +90,9 @@ def proceed_video(file_id_str):
             # Check if it's same watch record
             video_pg = videos_pg.first()
             watch_records_pg = WatchRecord.objects.filter(
-                video=video_id, user_profile_id=user_profile_id, time=video.time
+                video=video_id,
+                user_profile_id=user_profile_id,
+                time=timezone.make_aware(video.time, timezone.utc)
             )
             # Skip if same watch record already in db
             if watch_records_pg.exists():
@@ -101,7 +104,7 @@ def proceed_video(file_id_str):
         # Insert watch record
         user_profile = UserProfile.objects.filter(id=user_profile_id).first()
         watch_record_pg = WatchRecord.objects.create(
-            time=video.time,
+            time=timezone.make_aware(video.time, timezone.utc),
             user_profile=user_profile,
             video=video_pg
         )
