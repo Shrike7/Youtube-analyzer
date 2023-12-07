@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-+7@&dtl+5jq_9cr8fa!3kbzehur_aief7*uv7&6^k^@h6n^xhp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0']
 
 
 # Application definition
@@ -92,13 +92,22 @@ DATABASES = {
         'NAME': config('MONGO_DB_NAME'),
         'CLIENT': {
             'host': config('MONGO_DB_HOST'),
-            'port': config('MONGO_DB_PORT')
+            'port': config('MONGO_DB_PORT'),
+            'username': config('MONGO_DB_USER'),
+            'password': config('MONGO_DB_PASSWORD'),
         },
     }
 }
 
 from mongoengine import connect
-connect(config('MONGO_DB_NAME'), host=config('MONGO_DB_HOST'), port=int(config('MONGO_DB_PORT')))
+connect(
+    config('MONGO_DB_NAME'),
+    host=config('MONGO_DB_HOST'),
+    port=int(config('MONGO_DB_PORT')),
+    username=config('MONGO_DB_USER'),
+    password=config('MONGO_DB_PASSWORD'),
+    authentication_source=config('MONGO_DB_NAME')
+)
 
 
 # Password validation
