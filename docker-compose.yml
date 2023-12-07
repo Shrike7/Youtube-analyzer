@@ -1,0 +1,74 @@
+version: '3'
+
+services:
+  web:
+    build: ./Docker/django
+    container_name: django_container
+    entrypoint: sh ./Docker/django/entrypoint.sh
+    volumes:
+      - .:/app
+    ports:
+        - "8000:8000"
+    depends_on:
+      - postgres
+      - mongo
+      - celery
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: "postgres"  # ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: "postgres"  # ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: "youtube-analyzer"  # ${DB_NAME:-postgres}
+    ports:
+      - "5432:5432"  # "${DB_PORT:-5432}:${DB_PORT:-5432}"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  mongo:
+    image: mongo:latest
+    container_name: django_mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root # ${MONGO_DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: root # ${MONGO_DB_PASSWORD}
+      MONGO_INITDB_ROOT_DATABASE: mongodb # ${MONGO_DB_NAME:-mongo}
+    ports:
+      - "27018:27017"  # "${MONGO_DB_PORT:-27017}:${MONGO_DB_PORT:-27017}"
+    volumes:
+        - ./Docker/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+        - mongo-volume:/data/db
+
+  rabbitmq_server:
+    image: rabbitmq:latest
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  celery:
+    build: ./Docker/django
+    container_name: celery
+    command: [
+        "celery",
+        "-A",
+        "youtube_analyzer",
+        "worker",
+        "-c",
+        "1",
+        "-l",
+        "INFO",
+        "--without-heartbeat",
+        "--without-gossip",
+        "--without-mingle",
+    ]
+    volumes:
+      - .:/app
+    depends_on:
+        - postgres
+        - mongo
+        - rabbitmq_server
+
+volumes:
+  db-data:
+  mongo-volume:
