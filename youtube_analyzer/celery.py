@@ -10,4 +10,6 @@ app = Celery('youtube_analyzer')
 
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
+app.conf.broker_url = 'amqp://guest:guest@rabbitmq_server:5672//'
+
 app.autodiscover_tasks()
