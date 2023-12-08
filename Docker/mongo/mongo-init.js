@@ -1,15 +1,24 @@
-var admin = db.getSiblingDB('admin');
-admin.auth('root', 'root');
+var adminUsername = process.env.MONGO_INITDB_ROOT_USERNAME;
+var adminPassword = process.env.MONGO_INITDB_ROOT_PASSWORD;
+var adminDb       = process.env.MONGO_INITDB_ROOT_DATABASE;
 
-db = db.getSiblingDB('youtube_analyzer')
+var dbUsername    = process.env.MONGO_DB_USER;
+var dbPassword    = process.env.MONGO_DB_PASSWORD;
+var dbName        = process.env.MONGO_DB_NAME;
+
+
+var admin = db.getSiblingDB(adminDb);
+admin.auth(adminUsername, adminPassword);
+
+db = db.getSiblingDB(dbName);
 
 db.createUser({
-    user: 'django',
-    pwd: 'django',
+    user: dbUsername,
+    pwd: dbPassword,
     roles: [
-      {
-        role: 'dbOwner',
-      db: 'youtube_analyzer',
-    },
-  ],
+        {
+            role: 'dbOwner',
+            db: dbName,
+        },
+    ],
 });
