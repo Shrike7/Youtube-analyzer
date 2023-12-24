@@ -5,8 +5,8 @@ from django.contrib import messages
 from .forms import JSONUploadForm, CreateUserForm, LoginForm
 
 import json
-from .models.mongo import File, Video, Subtitle
-from .models.postgres import UserProfile, WatchRecord
+from .models.mongo import File, Video
+from .models.postgres import UserProfile
 from .tasks import proceed_video
 from .utils import proceed_json_video_data, get_dataframe_to_visualize
 
