@@ -1,5 +1,5 @@
 from ..models.postgres import (WatchRecord, Video,
-                               Category, Chanel, UserProfile)
+                               Category, Channel, UserProfile)
 from django.test import TestCase
 from django.contrib.auth.models import User
 
@@ -13,11 +13,11 @@ class TestPostgresModelsRelations(TestCase):
                                              password='12345')
         self.user_profile = UserProfile.objects.create(user_id=self.user)
         self.category = Category.objects.create(name='test_category')
-        self.chanel = Chanel.objects.create(custom_id='test_chanel',
-                                            name='test_chanel')
+        self.channel = Channel.objects.create(custom_id='test_channel',
+                                            name='test_channel')
         self.video = Video.objects.create(custom_id='test_video',
                                           name='test_video',
-                                          chanel=self.chanel,
+                                          channel=self.channel,
                                           category=self.category)
         self.watch_record = WatchRecord.objects.create(
             time='2033-01-01 00:00:00+00:00',
@@ -35,8 +35,8 @@ class TestPostgresModelsRelations(TestCase):
         self.assertEqual(self.watch_record.video, self.video)
 
     def test_video_foreign_keys_relations(self):
-        """Test Video chanel relate to Chanel and category relate to Category."""
-        self.assertEqual(self.video.chanel, self.chanel)
+        """Test Video channel relate to Channel and category relate to Category."""
+        self.assertEqual(self.video.channel, self.channel)
         self.assertEqual(self.video.category, self.category)
 
     def test_watch_record_uniqueness(self):
@@ -67,17 +67,17 @@ class TestPostgresModelsRelations(TestCase):
         except Exception:
             self.fail('WatchRecord with same user_profile and video but different time should be created.')
 
-    def test_watch_record_join_with_video_chanel_category(self):
-        """Test WatchRecord join with Video, Chanel and Category.
+    def test_watch_record_join_with_video_channel_category(self):
+        """Test WatchRecord join with Video, Channel and Category.
         Check if joined data is correct."""
         watch_records = WatchRecord.objects.filter(user_profile=self.user_profile)
 
         watch_records = watch_records.select_related('video')
-        watch_records = watch_records.select_related('video__chanel')
+        watch_records = watch_records.select_related('video__channel')
         watch_records = watch_records.select_related('video__category')
 
         # Check if joined data is correct
         self.assertEqual(watch_records[0].video, self.video)
-        self.assertEqual(watch_records[0].video.chanel, self.chanel)
+        self.assertEqual(watch_records[0].video.channel, self.channel)
         self.assertEqual(watch_records[0].video.category, self.category)
 

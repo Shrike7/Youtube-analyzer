@@ -35,21 +35,21 @@ def proceed_json_video_data(file_db, data):
 def get_dataframe_to_visualize(profile_id):
     """Help function for visualize_profile view.
     Get data from postgres related to profile.
-    Join with Video Chanel and Category.
+    Join with Video Channel and Category.
     Make some data preprocessing.
     Return pandas dataframe to visualize."""
     # Get all watch records for profile
     profile_watch_records = WatchRecord.objects.filter(user_profile_id=profile_id)
 
-    # Join with Video Chanel and Category
+    # Join with Video Channel and Category
     profile_watch_records = profile_watch_records.select_related('video')
-    profile_watch_records = profile_watch_records.select_related('video__chanel')
+    profile_watch_records = profile_watch_records.select_related('video__channel')
     profile_watch_records = profile_watch_records.select_related('video__category')
 
     # Take only needed columns
-    # WatchRecord time, Video name, Chanel name, Category name
+    # WatchRecord time, Video name, Channel name, Category name
     profile_watch_records = profile_watch_records.values(
-        'time', 'video__name', 'video__chanel__name', 'video__category__name'
+        'time', 'video__name', 'video__channel__name', 'video__category__name'
     )
 
     df = read_frame(profile_watch_records)

@@ -1,2 +1,2 @@
-from .postgres import Category, Chanel, UserProfile, Video, WatchRecord
+from .postgres import Category, Channel, UserProfile, Video, WatchRecord
 from .mongo import File, Video as VideoMongo, Subtitle

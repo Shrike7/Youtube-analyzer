@@ -6,7 +6,7 @@ class Category(models.Model):
     name = models.CharField(max_length=256)
 
 
-class Chanel(models.Model):
+class Channel(models.Model):
     custom_id = models.CharField(primary_key=True, max_length=30, unique=True,)
     name = models.CharField(max_length=256)
 
@@ -18,7 +18,7 @@ class UserProfile(models.Model):
 class Video(models.Model):
     custom_id = models.CharField(primary_key=True, max_length=11, unique=True)
     name = models.CharField(max_length=256)
-    chanel = models.ForeignKey(Chanel, on_delete=models.CASCADE)
+    channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
 

@@ -121,7 +121,7 @@ def videos_by_channels_chart(df):
     df = df.copy()
 
     # Group by channel and count. Only channel name and count columns
-    df = df.groupby('video__chanel__name').size().to_frame('nr_of_watched_videos').reset_index()
+    df = df.groupby('video__channel__name').size().to_frame('nr_of_watched_videos').reset_index()
 
     # Order by count
     df = df.sort_values('nr_of_watched_videos', ascending=False)
@@ -132,10 +132,10 @@ def videos_by_channels_chart(df):
     # Rotated bar chart
     fig = px.bar(
         df,
-        y='video__chanel__name',
+        y='video__channel__name',
         x='nr_of_watched_videos',
         labels={
-            'video__chanel__name': 'Channel',
+            'video__channel__name': 'Channel',
             'nr_of_watched_videos': 'Number of watched videos'
         },
         orientation='h',

@@ -1,7 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 from .models.mongo import File, Video as VideoMongo
-from .models.postgres import Category, Chanel, UserProfile, Video as VideoPostgres, WatchRecord
+from .models.postgres import Category, Channel, UserProfile, Video as VideoPostgres, WatchRecord
 from bson import ObjectId
 from .youtube_requests import get_video_category
 import logging
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 def proceed_video(file_id_str):
     """Proceed not proceeded videos in file.
     Get video category from YouTube api.
-    Check if already video, chanel, watch record in postgres db.
+    Check if already video, channel, watch record in postgres db.
     If not: insert.
     Update status of video in mongo db."""
     file_object_id = ObjectId(file_id_str)
@@ -36,7 +36,7 @@ def proceed_video(file_id_str):
         # Get id after "?v=", https://www.youtube.com/watch?v=2Vm1VQix4AA
         video_id = video.titleUrl.split("=")[-1]
         # Get id after "channel/", https://www.youtube.com/channel/UCcDj9XqT2YQERsdAnHGR7xg
-        chanel_id = video.subtitles[0].url.split('/')[-1]
+        channel_id = video.subtitles[0].url.split('/')[-1]
 
         videos_pg = VideoPostgres.objects.filter(custom_id=video_id)
         if not videos_pg.exists():
@@ -63,13 +63,13 @@ def proceed_video(file_id_str):
 
             category_id = category_id.first()
 
-            # Check if chanel already in db
-            channels_pg = Chanel.objects.filter(custom_id=chanel_id)
+            # Check if channel already in db
+            channels_pg = Channel.objects.filter(custom_id=channel_id)
             channel_pg = None
             if not channels_pg.exists():
-                # Insert chanel in db
-                channel_pg = Chanel.objects.create(
-                    custom_id=chanel_id,
+                # Insert channel in db
+                channel_pg = Channel.objects.create(
+                    custom_id=channel_id,
                     name=video.subtitles[0].name
                 )
                 channel_pg.save()
@@ -80,7 +80,7 @@ def proceed_video(file_id_str):
             video_pg = VideoPostgres.objects.create(
                 custom_id=video_id,
                 name=video.title,
-                chanel=channel_pg,
+                channel=channel_pg,
                 category=category_id
             )
             video_pg.save()
