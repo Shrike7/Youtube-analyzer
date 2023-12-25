@@ -72,6 +72,23 @@ services:
         - mongo
         - rabbitmq_server
 
+  celery-beat:
+    build: ./Docker/django
+    container_name: celery-beat
+    command: [
+        "celery",
+        "-A",
+        "youtube_analyzer",
+        "beat",
+        "-l",
+        "INFO"
+    ]
+    volumes:
+      - .:/app
+    depends_on:
+        - postgres
+        - mongo
+        - rabbitmq_server
 volumes:
   db-data:
   mongo-volume:
