@@ -125,6 +125,8 @@ What to improve:
 * Use another YouTube API to get more info for analysis.
 * Add more charts.
 
+Project can be scaled to platform that allows users to analyze their life on the internet.
+
 ## Lessons Learned
 This project had a big impact on my knowledge of Django and Docker.
 
