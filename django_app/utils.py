@@ -11,14 +11,20 @@ def proceed_json_video_data(file_db, data):
     # Check if ActivityControls is YouTube watch history
     if data['activityControls'][0] != 'YouTube watch history':
         return
+    # Check if header is YouTube
+    if data['header'] != 'YouTube':
+        return
     # Skip if there is details
     if 'details' in data:
+        return
+    # Skip if there is no subtitles
+    if 'subtitles' not in data:
         return
 
     video_db = Video(
         host=file_db.id,
         header=data['header'],
-        title=data['title'],
+        title=data['title'].split(' ', 1)[1],  # Remove word "Watched" from title beginning
         titleUrl=data['titleUrl'],
         time=data['time'],
         products=data['products'],
