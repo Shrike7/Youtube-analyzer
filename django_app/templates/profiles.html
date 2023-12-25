@@ -7,7 +7,7 @@
     <div class="container mx-auto">
         {% for file in files %}
             <div class="mb-5">
-                <h2 class="text-primary">{{ file.id }}</h2>
+                <h2 class="text-primary">File {{ file.user_profile_id }}</h2>
                 {% if file.status == False %}
                     <p class="text-danger">Processing</p>
                 {% else %}
