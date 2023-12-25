@@ -7,7 +7,7 @@ from .forms import JSONUploadForm, CreateUserForm, LoginForm
 import json
 from .models.mongo import File, Video
 from .models.postgres import UserProfile
-from .tasks import proceed_video
+from youtube_analyzer.tasks import proceed_video
 from .utils import proceed_json_video_data, get_dataframe_to_visualize
 
 from .chart_generation import (category_total_watched_chart, category_trend_chart,

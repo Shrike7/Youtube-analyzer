@@ -1,9 +1,9 @@
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task
-from .models.mongo import File, Video as VideoMongo
-from .models.postgres import Category, Channel, UserProfile, Video as VideoPostgres, WatchRecord
+from django_app.models.mongo import File, Video as VideoMongo
+from django_app.models.postgres import Category, Channel, UserProfile, Video as VideoPostgres, WatchRecord
 from bson import ObjectId
-from .youtube_requests import get_video_category
+from django_app.youtube_requests import get_video_category
 import logging
 from django.utils import timezone
 

@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_app',
-    'django_bootstrap5'
+    'django_bootstrap5',
+    'django_celery_beat'
 ]
 
 MIDDLEWARE = [
@@ -150,3 +151,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+from celery.schedules import crontab
+
+
+CELERY_BEAT_SCHEDULE = {
+    "sample_task": {
+        "task": "youtube_analyzer.tasks.daily_quota_renew",
+        "schedule": crontab(minute=59, hour=10),
+    },
+}
