@@ -123,3 +123,22 @@ def proceed_video(file_id_str):
         file.status = True
         file.save()
         logger.info(f"All videos in file {file_id_str} proceeded. File status updated.")
+
+
+@shared_task
+def daily_quota_renew():
+    """Renew daily quota for YouTube api.
+    Let's check unfinished files in mongo db.
+    If there is unfinished files, start task proceed_video."""
+    # Find all files with status False
+    files = File.objects.filter(status=False)
+
+    # Amount unfinished files
+    logger.info(f"Amount unfinished files: {len(files)}")
+
+    for file in files:
+        # Start task proceed_video
+        logger.info(f"Start task proceed_video for file {file.id}")
+        proceed_video.delay(str(file.id))
+
+    logger.info(f"Daily quota renew task finished.")
