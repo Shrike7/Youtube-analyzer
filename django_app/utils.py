@@ -8,31 +8,34 @@ def proceed_json_video_data(file_db, data):
     """Help function for upload_json view.
     Proceed json object video and save it to mongo.
     Skip unwanted data."""
-    # Check if header is YouTube
-    if data['header'] != 'YouTube':
-        return
-    # Skip if there is details
-    if 'details' in data:
-        return
-    # Skip if there is no subtitles
-    if 'subtitles' not in data:
-        return
+    try:
+        # Check if header is YouTube
+        if data['header'] != 'YouTube':
+            return
+        # Skip if there is details
+        if 'details' in data:
+            return
+        # Skip if there is no subtitles
+        if 'subtitles' not in data:
+            return
 
-    video_db = Video(
-        host=file_db.id,
-        header=data['header'],
-        title=data['title'].split(' ', 1)[1],  # Remove word "Watched" from title beginning
-        titleUrl=data['titleUrl'],
-        time=data['time'],
-        products=data['products'],
-        activityControls=data['activityControls'],
-    )
-    video_db.save()
+        video_db = Video(
+            host=file_db.id,
+            header=data['header'],
+            title=data['title'].split(' ', 1)[1],  # Remove word "Watched" from title beginning
+            titleUrl=data['titleUrl'],
+            time=data['time'],
+            products=data['products'],
+            activityControls=data['activityControls'],
+        )
+        video_db.save()
 
-    for subtitle in data['subtitles']:
-        subtitle_db = Subtitle(name=subtitle['name'], url=subtitle['url'])
-        video_db.subtitles.append(subtitle_db)
-    video_db.save()
+        for subtitle in data['subtitles']:
+            subtitle_db = Subtitle(name=subtitle['name'], url=subtitle['url'])
+            video_db.subtitles.append(subtitle_db)
+        video_db.save()
+    except Exception as e:
+        print(f"Error while proceeding video data: {e}. Continue...")
 
 
 def get_dataframe_to_visualize(profile_id):
