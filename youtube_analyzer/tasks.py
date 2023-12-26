@@ -6,6 +6,7 @@ from bson import ObjectId
 from django_app.youtube_requests import get_video_category
 import logging
 from django.utils import timezone
+from decouple import config
 
 
 logger = logging.getLogger(__name__)
@@ -32,6 +33,8 @@ def proceed_video(file_id_str):
     # Find all videos with host=file_id and status False
     videos = VideoMongo.objects.filter(host=file_object_id, status=False)
 
+    yt_api_key_index = 0
+    yt_api_key_list = config("API_KEY").split(',')
     for video in videos:
         # Get id after "?v=", https://www.youtube.com/watch?v=2Vm1VQix4AA
         video_id = video.titleUrl.split("=")[-1]
@@ -41,13 +44,22 @@ def proceed_video(file_id_str):
         videos_pg = VideoPostgres.objects.filter(custom_id=video_id)
         if not videos_pg.exists():
             # Get category id from YouTube api
-            video_category_id = get_video_category(video_id)
+            video_category_id = get_video_category(video_id, yt_api_key_list[yt_api_key_index])
 
             if video_category_id is None:
-                # Probably Ytb api quota run out
-                # Stop task. We will try again later
-                logger.info(f"Ytb api quota run out. Task stopped.")
-                return
+                # Check next api key
+                for i in range(yt_api_key_index + 1, len(yt_api_key_list)):
+                    video_category_id = get_video_category(video_id, yt_api_key_list[i])
+                    if video_category_id is not None:
+                        yt_api_key_index = i
+                        break
+
+                # If still None, quota daily limit exceeded for all api keys
+                if video_category_id is None:
+                    # Quota daily limit exceeded for all api keys
+                    # Stop task. We will try again later
+                    logger.info(f"Quota daily limit exceeded for all api keys. Task stopped.")
+                    return
 
             if video_category_id == 0:
                 logger.info(f"Video not found. Video {video_id} will be deleted from mongo")
