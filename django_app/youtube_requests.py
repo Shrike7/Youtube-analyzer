@@ -16,7 +16,6 @@ def get_video_category(video_id, api_key):
 
     # If empty items list
     if len(response_json["items"]) == 0:
-        print(f"Ytb api: Video {video_id} empty items list")
         return 0  # This id doesn't exist
 
     # Take only needed info
