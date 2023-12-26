@@ -35,7 +35,16 @@ def proceed_video(file_id_str):
 
     yt_api_key_index = 0
     yt_api_key_list = config("API_KEY").split(',')
+
+    logger_progress_counter = 0
+    logger_progress_interval = 2000
+
     for video in videos:
+        # Progress logger
+        logger_progress_counter += 1
+        if logger_progress_counter % logger_progress_interval == 0:
+            logger.info(f"Proceeded {logger_progress_counter} videos")
+
         # Get id after "?v=", https://www.youtube.com/watch?v=2Vm1VQix4AA
         video_id = video.titleUrl.split("=")[-1]
         # Get id after "channel/", https://www.youtube.com/channel/UCcDj9XqT2YQERsdAnHGR7xg
@@ -51,6 +60,7 @@ def proceed_video(file_id_str):
                 for i in range(yt_api_key_index + 1, len(yt_api_key_list)):
                     video_category_id = get_video_category(video_id, yt_api_key_list[i])
                     if video_category_id is not None:
+                        logger.info(f"Set yt_api_key_index to {i}")
                         yt_api_key_index = i
                         break
 
