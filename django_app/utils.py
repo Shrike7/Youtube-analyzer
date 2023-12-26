@@ -8,9 +8,6 @@ def proceed_json_video_data(file_db, data):
     """Help function for upload_json view.
     Proceed json object video and save it to mongo.
     Skip unwanted data."""
-    # Check if ActivityControls is YouTube watch history
-    if data['activityControls'][0] != 'YouTube watch history':
-        return
     # Check if header is YouTube
     if data['header'] != 'YouTube':
         return
