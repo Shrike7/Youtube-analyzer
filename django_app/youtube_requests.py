@@ -18,7 +18,7 @@ def get_video_category(video_id, api_key):
 
     # If empty items list
     if len(response_json["items"]) == 0:
-        return 0  # This id doesn't exist
+        return 0  # Video not found
 
     # Take only needed info
     category_id = response_json["items"][0]["snippet"]["categoryId"]
