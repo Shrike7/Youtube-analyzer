@@ -102,6 +102,9 @@ def upload_json(request):
             proceed_video.delay(str(file_db.id))
 
             return redirect('profiles')
+        else:
+            messages.error(request, 'Form is not valid')
+            return redirect('upload_json')
     else:
         form = JSONUploadForm()
 
