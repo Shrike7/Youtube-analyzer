@@ -13,6 +13,8 @@ def get_video_category(video_id, api_key):
         if response.status_code == 403:
             print("Ytb api: Quota daily limit exceeded")
             return None
+        print(f"Ytb api: Error while getting video category. Status code: {response.status_code}")
+        return 0
 
     # If empty items list
     if len(response_json["items"]) == 0:
