@@ -46,12 +46,12 @@ You can run this project locally using docker compose.
 ## .env File
 You can fill .env file according to .env.example
 
-| Variable name          | Description                                                                                                                                                                                                   |
-|------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| DJANGO_SECRET_KEY      | Django secret key can be generated using secret.py script. <br>```python secret.py```                                                                                                                         |
-| API_KEY                | YouTube API you can get from [Google Cloud Console](https://console.cloud.google.com/apis/credentials). <br> Step-by-step guide: [Get API key Guide link](docs%2Fget-youtube-api-guide%2Fget-yb-api-guide.md) |
-| Postgres Variables     |                                                                                                                                                                                                               |
-| MongoDB Variables      |                                                                                                                                                                                                               |
+| Variable name          | Description                                                                                                                                                                     |
+|------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| DJANGO_SECRET_KEY      | Django secret key can be generated using secret.py script. <br>```python secret.py```                                                                                           |
+| API_KEY                | YouTube API you can get from [Google Cloud Console](https://console.cloud.google.com/apis/credentials). <br> Step-by-step guide: [Get API key Guide link](docs%2Fget-youtube-api-guide%2Fget-yb-api-guide.md). <br> You can insert more than one API key separated by comma. |
+| Postgres Variables     |                                                                                                                                                                                 |
+| MongoDB Variables      |                                                                                                                                                                                 |
 
 ### Run Tests
 If you want to run tests without docker:
