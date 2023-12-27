@@ -39,6 +39,8 @@ def proceed_video(file_id_str):
     logger_progress_counter = 0
     logger_progress_interval = 2000
 
+    logger.info(f"{len(videos)} videos to proceed")
+
     for video in videos:
         # Progress logger
         logger_progress_counter += 1
