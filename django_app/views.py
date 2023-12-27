@@ -86,7 +86,7 @@ def upload_json(request):
         if form.is_valid():
             uploaded_file = form.cleaned_data['json_file']
 
-            data_list = json.loads(uploaded_file.read().decode('utf-8'))  # TODO: think about encoding format
+            data_list = json.loads(uploaded_file.read().decode('utf-8'))
 
             # Create user profile in postgres
             user_profile = UserProfile.objects.create(user_id=request.user)
