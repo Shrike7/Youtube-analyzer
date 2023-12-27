@@ -156,8 +156,8 @@ from celery.schedules import crontab
 
 
 CELERY_BEAT_SCHEDULE = {
-    "sample_task": {
+    "daily_quota_renew": {
         "task": "youtube_analyzer.tasks.daily_quota_renew",
-        "schedule": crontab(minute=59, hour=10),
+        "schedule": crontab(minute=0, hour=1),
     },
 }
