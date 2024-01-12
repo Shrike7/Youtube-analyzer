@@ -142,4 +142,4 @@ References
 * [1] Saúl Buentello. Explore your activity on youtube with r: How to analyze and visualize
 your personal data history. online. [cit. 2023–12–24] https://towardsdatascience.com/explore-your-activity-on-youtube-with-r-how-to-analyze-and-visualize-your-personal-data-histo
 * [2] neerajb22. My youtube history analysis. online. [cit. 2023–12–24] https://jovian.com/neerajb22/my-youtube-history-analysis.
-* [3] Jan Žižka. My youtube history analysis. online, 1415. [cit. 2020–02–09] http://zizka.trocnov/husiti/conspiration.pdf.
+* [3] Saúl Buentello. Explore your activity on youtube with R: How to analyze and visualize your personal data history. online. [cit. 2023–12–24] https://towardsdatascience.com/explore-your-activity-on-youtube-with-r-how-to-analyze-and-visualize-your-personal-data-history-b171aca632bc.
